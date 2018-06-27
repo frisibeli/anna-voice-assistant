@@ -186,11 +186,14 @@ Microphone.prototype.stop = function(){
 
 Microphone.prototype.detect = function(){
   if(this.mic){
+    //this.stop();
     this.mic.unpipe(this.recognizer);
   }
   try{
-    this.stop();
-    setTimeout(() => {this.listen(); this.mic.pipe(this.detector)}, 300);
+    setTimeout(() => {
+      //this.listen(); 
+      this.mic.pipe(this.detector)
+    }, 300);
   }catch(e){
 
   }
@@ -198,11 +201,13 @@ Microphone.prototype.detect = function(){
 
 Microphone.prototype.recognize = function(){
   if(this.mic){
+    //this.stop();
     this.mic.unpipe(this.detector);
   }
   try{
-    this.stop();
-    setTimeout(() => {this.listen(); this.mic.pipe(this.recognizer)}, 300);
+    setTimeout(() => {
+      //this.listen(); 
+      this.mic.pipe(this.recognizer)}, 300);
   }catch(e){
 
   }
@@ -212,7 +217,7 @@ Microphone.prototype.recognize = function(){
 Sonus.start = sonus => {
   //sonus.detectorMic = new Microphone(sonus);
   //sonus.mic = sonus.detectorMic.mic;
-  //sonus.detectorMic.listen();
+  sonus.detectorMic.listen();
   //sonus.recognitionMic = new Microphone(sonus);
   sonus.detectorMic.detect()
   //sonus.detectorMic.mic.pipe(sonus.detector)
