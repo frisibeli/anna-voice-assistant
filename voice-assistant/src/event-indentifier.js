@@ -20,6 +20,8 @@ module.exports = text => {
         type = "new_timer";
     }else if(text.includes("новини")){
         type = "get_latest_news";
+    }else if(text.includes("спечели световното")){
+        type = "joke"
     }
 
     return new Event(type, options);
