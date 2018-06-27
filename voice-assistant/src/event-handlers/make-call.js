@@ -1,5 +1,7 @@
 const Nexmo = require('nexmo');
 
+const PHONE_NUMBER = "359886338538";
+
 const options = {};
 const nexmo = new Nexmo({
     apiKey: "f4cdf341",
@@ -13,7 +15,7 @@ const makeCall = () => {
     nexmo.calls.create({
         to: [{
             type: 'phone',
-            number: "359886338538",
+            number: PHONE_NUMBER,
         }],
         from: {
             type: 'phone',
@@ -23,6 +25,7 @@ const makeCall = () => {
     })
 }
 
-module.exports = function call() {
+module.exports = event => new Promise((resolve, reject) => {
     makeCall();
-}
+    resolve(`Обаждам се на ${PHONE_NUMBER}`);
+});
