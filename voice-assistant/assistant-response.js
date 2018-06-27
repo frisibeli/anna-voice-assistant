@@ -2,10 +2,7 @@ axios = require('axios');
 fs = require('fs');
 play = require('play');
 
-sourceFile = require('./index');
-let testResponse = sourceFile.whatToSay;
-
-getToken = (callback) => {
+const getToken = (callback) => {
     return axios.post("https://northeurope.api.cognitive.microsoft.com/sts/v1.0/issueToken", {},
         { headers: { 'Ocp-Apim-Subscription-Key': '1cb5cf2b67184aecb5c64f39335a529e' } })
         .then(token => {
@@ -16,8 +13,8 @@ getToken = (callback) => {
 }
 
 
-const bodyTest = "<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='bg-BG'><voice  name='Microsoft Server Speech Text to Speech Voice (bg-BG, Ivan)'>" + testResponse + "</voice></speak>";
-returnResponse = (token) => {
+const returnResponse = (token, text) => {
+    const bodyTest = "<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='bg-BG'><voice  name='Microsoft Server Speech Text to Speech Voice (bg-BG, Ivan)'>" + text + "</voice></speak>";
     return axios.post("https://northeurope.tts.speech.microsoft.com/cognitiveservices/v1", bodyTest,
         {
             headers: {
@@ -37,4 +34,7 @@ returnResponse = (token) => {
         })
 }
 
-console.log(getToken(returnResponse))
+module.exports = function speak(text){
+    getToken((token) => returnResponse(token, text))
+}
+

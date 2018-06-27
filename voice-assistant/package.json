@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.18.0",
+    "play": "^0.5.0",
     "sonus": "^0.1.9"
   }
 }
