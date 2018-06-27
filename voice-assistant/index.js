@@ -1,11 +1,10 @@
 const Sonus = require('./anna-core');
 const speech = require('@google-cloud/speech')({
     projectId: 'voice-assistant',
-    keyFilename: './voice-assistant-d5964a2c2b89.json'
+    keyFilename: './config/voice-assistant-d5964a2c2b89.json'
 })
-const speak = require('./assistant-response')
-const call = require('./make-call')
-
+const speak = require('./src/text-to-speech')
+const call = require('./src/event-handlers/make-call')
 
 const hotwords = [{ file: 'resources/Anna.pmdl', hotword: 'anna' }]
 const language = "bg-BG";
