@@ -13,7 +13,10 @@ const hotwords = [{ file: 'resources/Anna.pmdl', hotword: 'anna' }]
 const language = "bg-BG";
 const sonus = Sonus.init({ hotwords, language }, speech)
 
-Sonus.start(sonus)
+const startUpSound = __dirname + '/resources/start-up-sound.mp3';
+play.sound(startUpSound);
+
+Sonus.start(sonus);
 sonus.on('hotword', (index, keyword) => {
     console.log("!");
     const wakeUpSound = __dirname + '/resources/wake-up-sound.mp3';
