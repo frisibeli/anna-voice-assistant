@@ -4,6 +4,8 @@ const speech = require('@google-cloud/speech')({
     keyFilename: './voice-assistant-d5964a2c2b89.json'
 })
 const speak = require('./assistant-response')
+const call = require('./make-call')
+
 
 const hotwords = [{ file: 'resources/Anna.pmdl', hotword: 'anna' }]
 const language = "bg-BG";
@@ -17,9 +19,9 @@ sonus.on('final-result', result => {
     if (result.includes("стоп")) {
         Sonus.stop()
     }
+    if (result.includes("обади се")) {
+        call()
+    }
 })
 sonus.on('error', (error) => console.log(error))
-
-//module.exports.whatToSay = "тествам това, брат";
-
 
