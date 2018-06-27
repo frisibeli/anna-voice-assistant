@@ -1,6 +1,7 @@
 const axios = require('axios');
 const fs = require('fs');
 const play = require('play');
+const crypto = require('crypto');
 play.playerList = ['play'];
 
 const getToken = (callback) => {
@@ -27,15 +28,23 @@ const returnResponse = (token, text) => {
             responseType: 'arraybuffer'
         })
         .then((response) => {
-            const outputFilename = __dirname+'/../resources/file.mp3';
-            fs.writeFileSync(outputFilename, response.data);
-            play.sound(outputFilename)
+            let hex = crypto.createHash('md5').update(text).digest("hex");
+            const filePath = __dirname+'/../resources/'+hex+'.mp3';
+            fs.writeFileSync(filePath, response.data);
+            play.sound(filePath)
         }).catch(error => {
             console.log("Error: ", error)
         })
 }
 
 module.exports = function speak(text){
-    getToken((token) => returnResponse(token, text))
+    let hex = crypto.createHash('md5').update(text).digest("hex");
+    const filePath = __dirname+'/../resources/cache/'+hex+'.mp3';
+    if( fs.existsSync(filePath) ){
+        console.log('Playing from cache');
+        play.sound(filePath)
+    }else{
+        getToken((token) => returnResponse(token, text));
+    }
 }
 
