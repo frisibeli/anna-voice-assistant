@@ -17,7 +17,7 @@ CloudSpeechRecognizer.init = recognizer => {
   return csr
 }
 
-CloudSpeechRecognizer.startStreaming = (options, audioStream, cloudSpeechRecognizer) => {
+CloudSpeechRecognizer.startStreaming = (options, sonus, cloudSpeechRecognizer) => {
   if (cloudSpeechRecognizer.listening) {
     return
   }
@@ -66,11 +66,14 @@ CloudSpeechRecognizer.startStreaming = (options, audioStream, cloudSpeechRecogni
 
   const stopStream = () => {
     cloudSpeechRecognizer.listening = false
-    audioStream.unpipe(recognitionStream)
+    sonus.recognitionMic.mic.unpipe(recognitionStream)
+    sonus.recognitionMic.stop();
+    sonus.detectorMic.listen();
     recognitionStream.end()
   }
-
-  audioStream.pipe(recognitionStream)
+  sonus.recognitionMic.listen();
+  sonus.detectorMic.stop();
+  sonus.recognitionMic.mic.pipe(recognitionStream)
 }
 
 const Sonus = {}
@@ -100,7 +103,7 @@ Sonus.init = (options, recognizer) => {
   // defaults
   opts.models = models
   opts.resource = opts.resource || 'node_modules/snowboy/resources/common.res'
-  opts.audioGain = opts.audioGain || 6.0
+  opts.audioGain = opts.audioGain || 2.0
   opts.language = opts.language || 'en-US' //https://cloud.google.com/speech/docs/languages
 
   const detector = sonus.detector = new Detector(opts)
@@ -126,7 +129,7 @@ Sonus.init = (options, recognizer) => {
       try {
         let triggerHotword = (index == 0) ? hotword : models.lookup(index)
         sonus.emit('hotword', index, triggerHotword)
-        CloudSpeechRecognizer.startStreaming(opts, sonus.mic, csr)
+        CloudSpeechRecognizer.startStreaming(opts, sonus, csr)
       } catch (e) {
         throw ERROR.INVALID_INDEX
       }
@@ -146,13 +149,37 @@ Sonus.init = (options, recognizer) => {
   return sonus
 }
 
-Sonus.start = sonus => {
-  sonus.mic = record.start({
-    threshold: 0,
-    device: sonus.device || null,
-    recordProgram: sonus.recordProgram || "rec",
-    verbose: false
+const Microphone = function(options){
+  this.id = Math.random();
+
+  this.threshold = 0;
+  this.device = options.device || null;
+  this.recordProgram = options.recordProgram || "rec"
+  this.verbose = true;
+
+  this.mic = {};
+}
+
+Microphone.prototype.listen = function(){
+  console.log(this.id + " Listening");
+  this.mic = record.start({
+    threshold: this.threshold,
+    device: this.device,
+    recordProgram: this.recordProgram,
+    verbose: this.verbose
   })
+}
+
+Microphone.prototype.stop = function(){
+  this.mic.stop();
+  console.log(this.id + " Stop");
+}
+
+Sonus.start = sonus => {
+  sonus.detectorMic = new Microphone(sonus);
+  sonus.mic = sonus.detectorMic.mic;
+
+  sonus.recognitionMic = new Microphone(sonus);
 
   sonus.mic.pipe(sonus.detector)
   sonus.started = true
