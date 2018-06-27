@@ -16,6 +16,8 @@ module.exports = text => {
         type = "turn_lamp_on";
     }else if(text.includes("изключи")){
         type = "turn_lamp_off";
+    }else if(text.includes("новини")){
+        type = "get_latest_news";
     }
 
     return new Event(type, options);
