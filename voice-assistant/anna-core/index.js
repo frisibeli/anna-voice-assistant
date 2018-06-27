@@ -66,14 +66,18 @@ CloudSpeechRecognizer.startStreaming = (options, sonus, cloudSpeechRecognizer) =
 
   const stopStream = () => {
     cloudSpeechRecognizer.listening = false
-    sonus.recognitionMic.mic.unpipe(recognitionStream)
-    sonus.recognitionMic.stop();
-    sonus.detectorMic.listen();
+    sonus.detectorMic.detect();
+    //sonus.recognitionMic.mic.unpipe(recognitionStream)
+    //sonus.recognitionMic.stop();
+
+    //sonus.detectorMic.listen();
     recognitionStream.end()
   }
-  sonus.recognitionMic.listen();
-  sonus.detectorMic.stop();
-  sonus.recognitionMic.mic.pipe(recognitionStream)
+  sonus.detectorMic.recognizer = recognitionStream;
+  sonus.detectorMic.recognize();
+  //sonus.recognitionMic.listen();
+  //sonus.detectorMic.stop();
+  //sonus.recognitionMic.mic.pipe(recognitionStream)
 }
 
 const Sonus = {}
@@ -85,7 +89,7 @@ Sonus.init = (options, recognizer) => {
     models = new Models(),
     sonus = new stream.Writable(),
     csr = CloudSpeechRecognizer.init(recognizer)
-  sonus.mic = {}
+  
   sonus.recordProgram = opts.recordProgram
   sonus.device = opts.device
   sonus.started = false
@@ -131,6 +135,7 @@ Sonus.init = (options, recognizer) => {
         sonus.emit('hotword', index, triggerHotword)
         CloudSpeechRecognizer.startStreaming(opts, sonus, csr)
       } catch (e) {
+        console.error(e);
         throw ERROR.INVALID_INDEX
       }
     } else {
@@ -146,22 +151,27 @@ Sonus.init = (options, recognizer) => {
     record.resume()
   }
 
+  sonus.detectorMic = new Microphone(opts);
+  //sonus.recognitionMic = new Microphone(opts);
+  sonus.mic = sonus.detectorMic.mic;
+  sonus.detectorMic.detector = sonus.detector;
+
   return sonus
 }
 
 const Microphone = function(options){
-  this.id = Math.random();
-
   this.threshold = 0;
   this.device = options.device || null;
   this.recordProgram = options.recordProgram || "rec"
   this.verbose = true;
 
-  this.mic = {};
+  this.detector = options.detector;
+  this.recognizer = options.recognizer;
+
+  this.mic = false;
 }
 
 Microphone.prototype.listen = function(){
-  console.log(this.id + " Listening");
   this.mic = record.start({
     threshold: this.threshold,
     device: this.device,
@@ -171,17 +181,41 @@ Microphone.prototype.listen = function(){
 }
 
 Microphone.prototype.stop = function(){
-  this.mic.stop();
-  console.log(this.id + " Stop");
+  record.stop();
+}
+
+Microphone.prototype.detect = function(){
+  if(this.mic){
+    this.mic.unpipe(this.recognizer);
+  }
+  try{
+    this.stop();
+    setTimeout(() => {this.listen(); this.mic.pipe(this.detector)}, 300);
+  }catch(e){
+
+  }
+}
+
+Microphone.prototype.recognize = function(){
+  if(this.mic){
+    this.mic.unpipe(this.detector);
+  }
+  try{
+    this.stop();
+    setTimeout(() => {this.listen(); this.mic.pipe(this.recognizer)}, 300);
+  }catch(e){
+
+  }
+  
 }
 
 Sonus.start = sonus => {
-  sonus.detectorMic = new Microphone(sonus);
-  sonus.mic = sonus.detectorMic.mic;
-
-  sonus.recognitionMic = new Microphone(sonus);
-
-  sonus.mic.pipe(sonus.detector)
+  //sonus.detectorMic = new Microphone(sonus);
+  //sonus.mic = sonus.detectorMic.mic;
+  //sonus.detectorMic.listen();
+  //sonus.recognitionMic = new Microphone(sonus);
+  sonus.detectorMic.detect()
+  //sonus.detectorMic.mic.pipe(sonus.detector)
   sonus.started = true
 }
 
