@@ -23,7 +23,7 @@ sonus.on('hotword', (index, keyword) => {
 sonus.on('final-result', text => {
     let event = indentifyEvent(text.toLowerCase());
     if (event.type == 'stop') {
-        Sonus.stop()
+        //Sonus.stop()
     } else {
         dispatchEvent(event).then(text => {
             textToSpeech(text);
