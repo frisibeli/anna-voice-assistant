@@ -1,11 +1,11 @@
-axios = require('axios');
-fs = require('fs');
-play = require('play');
+const axios = require('axios');
+const fs = require('fs');
+const play = require('play');
 
 sourceFile = require('./index');
-let testResponse = sourceFile.whatToSay;
+let assistantResponse = sourceFile.whatToSay;
 
-getToken = (callback) => {
+const getToken = (callback) => {
     return axios.post("https://northeurope.api.cognitive.microsoft.com/sts/v1.0/issueToken", {},
         { headers: { 'Ocp-Apim-Subscription-Key': '1cb5cf2b67184aecb5c64f39335a529e' } })
         .then(token => {
@@ -16,9 +16,9 @@ getToken = (callback) => {
 }
 
 
-const bodyTest = "<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='bg-BG'><voice  name='Microsoft Server Speech Text to Speech Voice (bg-BG, Ivan)'>" + testResponse + "</voice></speak>";
-returnResponse = (token) => {
-    return axios.post("https://northeurope.tts.speech.microsoft.com/cognitiveservices/v1", bodyTest,
+const requestBody = "<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='bg-BG'><voice  name='Microsoft Server Speech Text to Speech Voice (bg-BG, Ivan)'>" + assistantResponse + "</voice></speak>";
+const returnResponse = (token) => {
+    return axios.post("https://northeurope.tts.speech.microsoft.com/cognitiveservices/v1", requestBody,
         {
             headers: {
                 'Authorization': `Bearer + ${token}`,
@@ -29,9 +29,9 @@ returnResponse = (token) => {
             responseType: 'arraybuffer'
         })
         .then((response) => {
-            const outputFilename = 'file.mp3';
+            const outputFilename = 'response.mp3';
             fs.writeFileSync(outputFilename, response.data);
-            play.sound('./file.mp3')
+            play.sound('./response.mp3')
         }).catch(error => {
             console.log("Error: ", error)
         })

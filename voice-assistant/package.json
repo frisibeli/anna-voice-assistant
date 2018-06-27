@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "sonus": "^0.1.9"
+    "nexmo": "^2.3.2",
+    "sonus": "^0.1.9",
+    "twilio": "^3.17.4"
   }
 }
