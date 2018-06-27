@@ -3,6 +3,7 @@ const speech = require('@google-cloud/speech')({
     projectId: 'voice-assistant',
     keyFilename: './config/voice-assistant-d5964a2c2b89.json'
 })
+
 const textToSpeech = require('./src/text-to-speech');
 const indentifyEvent = require('./src/event-indentifier');
 const dispatchEvent = require('./src/event-dispatcher');
