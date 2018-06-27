@@ -18,6 +18,6 @@ sonus.on('final-result', result => {
 })
 sonus.on('error', (error) => console.log(error))
 
-module.exports.whatToSay = "test";
+module.exports.whatToSay = "тествам това, брат";
 
 

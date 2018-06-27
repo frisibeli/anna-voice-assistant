@@ -1,5 +1,7 @@
 axios = require('axios');
 fs = require('fs');
+play = require('play');
+
 sourceFile = require('./index');
 let testResponse = sourceFile.whatToSay;
 
@@ -29,6 +31,7 @@ returnResponse = (token) => {
         .then((response) => {
             const outputFilename = 'file.mp3';
             fs.writeFileSync(outputFilename, response.data);
+            play.sound('./file.mp3')
         }).catch(error => {
             console.log("Error: ", error)
         })
