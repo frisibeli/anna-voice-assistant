@@ -1,6 +1,7 @@
 const axios = require('axios');
 const fs = require('fs');
 const play = require('play');
+play.playerList = ['play'];
 
 const getToken = (callback) => {
     return axios.post("https://northeurope.api.cognitive.microsoft.com/sts/v1.0/issueToken", {},
