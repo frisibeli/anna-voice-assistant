@@ -26,9 +26,9 @@ const returnResponse = (token, text) => {
             responseType: 'arraybuffer'
         })
         .then((response) => {
-            const outputFilename = 'response.mp3';
+            const outputFilename = 'file.mp3';
             fs.writeFileSync(outputFilename, response.data);
-            play.sound('./response.mp3')
+            play.sound('./file.mp3')
         }).catch(error => {
             console.log("Error: ", error)
         })
