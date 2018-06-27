@@ -7,18 +7,24 @@ const speech = require('@google-cloud/speech')({
 const textToSpeech = require('./src/text-to-speech');
 const indentifyEvent = require('./src/event-indentifier');
 const dispatchEvent = require('./src/event-dispatcher');
+const systemSounds = require('./src/systemSounds');
+
 
 const hotwords = [{ file: 'resources/Anna.pmdl', hotword: 'anna' }]
 const language = "bg-BG";
 const sonus = Sonus.init({ hotwords, language }, speech)
 
-Sonus.start(sonus)
-sonus.on('hotword', (index, keyword) => console.log("!"));
+Sonus.start(sonus);
+systemSounds.playStartUpSound();
+sonus.on('hotword', (index, keyword) => {
+    console.log("!");
+    systemSounds.playWakeUpSound();
+});
 sonus.on('final-result', text => {
     let event = indentifyEvent(text.toLowerCase());
-    if(event.type == 'stop'){
+    if (event.type == 'stop') {
         Sonus.stop()
-    }else{
+    } else {
         dispatchEvent(event).then(text => {
             textToSpeech(text);
         })

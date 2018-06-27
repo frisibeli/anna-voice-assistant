@@ -7,7 +7,7 @@ const nexmo = new Nexmo({
     apiKey: "f4cdf341",
     apiSecret: "0rjDkGNO9Dq4vLyt",
     applicationId: "167a2e22-8182-4ed1-a4da-36ce8460bf56",
-    privateKey: "./resources/private.key",
+    privateKey: __dirname + '/../../resources/private.key'
 }, options);
 
 
@@ -22,7 +22,11 @@ const makeCall = () => {
             number: "12345678901"
         },
         answer_url: ['https://developer.nexmo.com/ncco/tts.json']
-    })
+    }, (res, err) => {
+        if (res) console.log(res.status)
+        else console.log(err)
+    }
+    )
 }
 
 module.exports = event => new Promise((resolve, reject) => {
