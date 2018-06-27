@@ -20,14 +20,26 @@ sonus.on('hotword', (index, keyword) => {
     console.log("!");
     systemSounds.playWakeUpSound();
 });
+
+let dialogueCallback = null;
 sonus.on('final-result', text => {
-    let event = indentifyEvent(text.toLowerCase());
-    if (event.type == 'stop') {
-        //Sonus.stop()
-    } else {
-        dispatchEvent(event).then(text => {
-            textToSpeech(text);
-        })
+    if(!dialogueCallback){
+        let event = indentifyEvent(text.toLowerCase());
+        if (event.type == 'stop') {
+            //Sonus.stop()
+        } else {
+            dispatchEvent(event).then(result => {
+                if(result.constructor.name == "String"){
+                    textToSpeech(result);
+                }else if(result.constructor.name == "Function"){
+                    dialogueCallback = result
+                    setTimeout(() => Sonus.trigger(sonus, 0), 2000)
+                }
+            })
+        }
+    }else{
+        dialogueCallback(text);
+        dialogueCallback = null;
     }
 })
 sonus.on('error', (error) => console.log(error))
