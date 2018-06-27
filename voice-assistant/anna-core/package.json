@@ -1,0 +1,64 @@
+{
+  "_from": "sonus",
+  "_id": "sonus@0.1.9",
+  "_inBundle": false,
+  "_integrity": "sha1-HUo5RK1f6mUR+CgQm/WUQU//HBo=",
+  "_location": "/sonus",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "sonus",
+    "name": "sonus",
+    "escapedName": "sonus",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/sonus/-/sonus-0.1.9.tgz",
+  "_shasum": "1d4a3944ad5fea6511f828109bf594414fff1c1a",
+  "_spec": "sonus",
+  "_where": "/Users/kristiyan/Documents/Projects/anna-voice-assistant/voice-assistant",
+  "author": {
+    "name": "Evan Cohen"
+  },
+  "bugs": {
+    "url": "https://github.com/evancohen/sonus/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "@google-cloud/speech": "^0.10.3",
+    "node-record-lpcm16": "^0.3.0",
+    "snowboy": "^1.2.0"
+  },
+  "deprecated": false,
+  "description": "Open source cross platform decentralized always-on speech recognition framework",
+  "devDependencies": {
+    "eslint": "^3.7.0"
+  },
+  "homepage": "https://github.com/evancohen/sonus#readme",
+  "keywords": [
+    "keyword",
+    "spotting",
+    "hotword",
+    "detection",
+    "STT",
+    "speech",
+    "voice"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "sonus",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evancohen/sonus.git"
+  },
+  "scripts": {
+    "test": "eslint ."
+  },
+  "version": "0.1.9"
+}

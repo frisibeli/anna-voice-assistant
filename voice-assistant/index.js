@@ -1,4 +1,4 @@
-const Sonus = require('sonus');
+const Sonus = require('./anna-core');
 const speech = require('@google-cloud/speech')({
     projectId: 'voice-assistant',
     keyFilename: './voice-assistant-d5964a2c2b89.json'
@@ -18,6 +18,6 @@ sonus.on('final-result', result => {
 })
 sonus.on('error', (error) => console.log(error))
 
-module.exports.whatToSay = "тествам това, брат";
+//module.exports.whatToSay = "тествам това, брат";
 
 
