@@ -193,7 +193,7 @@ Microphone.prototype.detect = function(){
     setTimeout(() => {
       //this.listen(); 
       this.mic.pipe(this.detector)
-    }, 300);
+    }, 100);
   }catch(e){
 
   }
@@ -207,7 +207,7 @@ Microphone.prototype.recognize = function(){
   try{
     setTimeout(() => {
       //this.listen(); 
-      this.mic.pipe(this.recognizer)}, 300);
+      this.mic.pipe(this.recognizer)}, 100);
   }catch(e){
 
   }
