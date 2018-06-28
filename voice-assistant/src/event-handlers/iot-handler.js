@@ -15,7 +15,7 @@ module.exports.turnOnLamp = () => {
                 resolve('Включих лампата.')
                 console.log(response);
             }).catch(error => {
-                reject();
+                reject('Няма връзка с интернет');
                 console.log(error);
             })
     })
@@ -29,7 +29,7 @@ module.exports.turnOffLamp = () => {
                 resolve('Изключих лампата.')
                 console.log(response);
             }).catch(error => {
-                reject();
+                reject('Няма връзка с интернет');
                 console.log(error);
             })
     })

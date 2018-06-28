@@ -18,6 +18,8 @@ module.exports = text => {
         type = "turn_lamp_off";
     }else if(text.includes("таймер")){
         type = "new_timer";
+    }else if(text.includes("здравей")){
+        type = "greet";
     }else if(text.includes("новини")){
         type = "get_latest_news";
     }else if(text.includes("спечели световното")){

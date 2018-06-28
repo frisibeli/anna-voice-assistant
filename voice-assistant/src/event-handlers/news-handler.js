@@ -8,7 +8,7 @@ module.exports.getLatestNews = () => {
                 const news = response.data.articles;
                 resolve(news[0].title)
             }).catch((err) => {
-                reject();
+                reject('Няма връзка с интернет');
                 console.log(err);
             })
     })

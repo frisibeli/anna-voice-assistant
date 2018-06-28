@@ -35,6 +35,10 @@ sonus.on('final-result', text => {
                     dialogueCallback = result
                     setTimeout(() => Sonus.trigger(sonus, 0), 2000)
                 }
+            }).catch(e => {
+                if(result.constructor.name == "String"){
+                    textToSpeech(e);
+                }
             })
         }
     }else{
